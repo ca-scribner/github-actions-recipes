@@ -2,7 +2,7 @@
 # Also checks out the relevant PR code, even if this is a comment (which would by default check out master's code)
 name: Get Git SHA/Ref on PR or Comment
 on: 
-  # Fire when PR actually merges into branch
+  # Fire when any PR activity happens (create, push new commit to PR branch, etc)
   pull_request:
     branches: [master]
   issue_comment:
