@@ -1,0 +1,3 @@
+# Github Actions Recipes
+
+This is a collection of recipes/a sandbox for Github Actions.  Nothing really **does work** here, just a bunch of proof of concept items that remind me how to do things for when I inevitably forget...
