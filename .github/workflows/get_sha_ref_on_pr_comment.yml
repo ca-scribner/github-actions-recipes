@@ -1,0 +1,53 @@
+# Workflow gets the SHA/Ref for both a PR (easy) and a comment (harder) and saves them for future use
+# Also checks out the relevant PR code, even if this is a comment (which would by default check out master's code)
+name: Get Git SHA/Ref on PR or Comment
+on: 
+  # Fire when PR actually merges into branch
+  pull_request:
+    branches: [master]
+  issue_comment:
+    types: [create]
+    
+jobs:
+  prepare_git:
+    runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, '/prepare-git') || github.event_name != 'issue_comment'
+    outputs:
+      event_ref: ${{ env.event_ref }}
+      event_git_sha: ${{ env.event_git_sha }}
+      pr_number: ${{ env.pr_number }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get event ref is comment
+        if: github.event_name == 'issue_comment'
+        run: |
+          echo "Writing +refs/pull/${{ github.event.issue.number }}/merge to environment variable"
+          echo "::set-env name=event_ref::+refs/pull/${{ github.event.issue.number }}/merge"
+      - name: Get event ref if not comment
+        if: github.event_name != 'issue_comment'
+        run: |
+          echo "Writing ${{ github.ref }} to environment variable"
+          echo "::set-env name=event_ref::{{ github.ref }}"
+      # If we are acting for a comment on a PR, the comment's default checkout will be master not the PR's commit.
+      # Check out the PR's commit
+      - name: Checkout PR code
+        if: github.event_name == 'issue_comment'
+        run: |
+           git fetch origin ${{ env.event_ref }}
+           git checkout FETCH_HEAD
+      - name: Store event SHA to output
+        run: |
+          echo "Storing git SHA $(git rev-parse HEAD) to environment variable"
+          echo ::set-env name=event_git_sha::$(git rev-parse HEAD)
+      - name: Get PR number via awk
+        run: |
+          echo "Extracting PR number from GITHUB_REF ($GITHUB_REF)"
+          pr_number=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          echo "Writing PR number $pr_number to environment vairable"
+          echo ::set-env name=pr_number::$pr_number
+      - name: Get PR number via github event context
+        run: |
+          echo "Saving PR number from github.event.issue.number (${{ github.event.issue.number }}) to environment variable"
+          echo ::set-env name=pr_number::${{ github.event.issue.number }}
+
+
