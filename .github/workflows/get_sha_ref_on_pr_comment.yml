@@ -47,4 +47,8 @@ jobs:
         run: |
           echo ${{ steps.is_pr_comment.outputs.boolean }}
           echo ${{ steps.is_pr_comment.outputs.boolean_str }}
+      # Now later steps can use this in their if statements
+      - id: dependent_step
+        if: steps.is_pr_comment.outputs.boolean
+        run: echo "I ran because of an upstream check passing!"
  
