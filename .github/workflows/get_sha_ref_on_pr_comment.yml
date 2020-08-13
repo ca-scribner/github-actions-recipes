@@ -16,6 +16,7 @@ jobs:
   in_scope:
     name: Fail if not comment on PR
     runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, '/my-trigger') || github.event_name != 'issue_comment'
     steps:
       - name: Dump GitHub context
         env:
@@ -24,45 +25,26 @@ jobs:
       - name: Fail if this is an issue_comment that is not on a PR (pass on all other events)
         if: github.event.issue.pull_request == 0 && github.event_name == 'issue_comment'
         run: ::error::Caught issue without PR.  Fail to kill future dependencies
-  prepare_git:
+  depends_on_scope:
     runs-on: ubuntu-latest
-    if: contains(github.event.comment.body, '/prepare-git') || github.event_name != 'issue_comment'
-    outputs:
-      event_ref: ${{ env.event_ref }}
-      event_git_sha: ${{ env.event_git_sha }}
-      pr_number: ${{ env.pr_number }}
+    needs: [in_scope]
+    name: Run if in_scope was successful
     steps:
-      - uses: actions/checkout@v2
-      - name: Get event ref is comment
-        if: github.event_name == 'issue_comment'
-        run: |
-          echo "Writing +refs/pull/${{ github.event.issue.number }}/merge to environment variable"
-          echo "::set-env name=event_ref::+refs/pull/${{ github.event.issue.number }}/merge"
-      - name: Get event ref if not comment
-        if: github.event_name != 'issue_comment'
-        run: |
-          echo "Writing ${{ github.ref }} to environment variable"
-          echo "::set-env name=event_ref::{{ github.ref }}"
-      # If we are acting for a comment on a PR, the comment's default checkout will be master not the PR's commit.
-      # Check out the PR's commit
-      - name: Checkout PR code
-        if: github.event_name == 'issue_comment'
-        run: |
-           git fetch origin ${{ env.event_ref }}
-           git checkout FETCH_HEAD
-      - name: Store event SHA to output
-        run: |
-          echo "Storing git SHA $(git rev-parse HEAD) to environment variable"
-          echo ::set-env name=event_git_sha::$(git rev-parse HEAD)
-      - name: Get PR number via awk
-        run: |
-          echo "Extracting PR number from GITHUB_REF ($GITHUB_REF)"
-          pr_number=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-          echo "Writing PR number $pr_number to environment vairable"
-          echo ::set-env name=pr_number::$pr_number
-      - name: Get PR number via github event context
-        run: |
-          echo "Saving PR number from github.event.issue.number (${{ github.event.issue.number }}) to environment variable"
-          echo ::set-env name=pr_number::${{ github.event.issue.number }}
+      - run: echo "I ran!"
 
-
+  # Handle guard against issue_comment not in PR as a step output
+  some_job:
+    runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, '/my-trigger') || github.event_name != 'issue_comment'
+    steps:
+      - id: is_pr_comment
+        # Is issue_comment and has something about pull_request
+        if: github.event_name == 'issue_comment' && github.event.issue.pull_request != 0
+        run: |
+          ::set-output name=boolean::true
+          ::set-output name=boolean_str::truth!
+      - id: check_pr_comment
+        run: |
+          echo ${{ steps.is_pr_comment.outputs.boolean }}
+          echo ${{ steps.is_pr_comment.outputs.boolean_str }}
+ 
