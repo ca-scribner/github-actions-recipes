@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: failme
         run: ::error::I am a failure
+      - name: doIRun
+        run: echo "Did I run after the failure?"
   prepare_git:
     runs-on: ubuntu-latest
     if: contains(github.event.comment.body, '/prepare-git') || github.event_name != 'issue_comment'
