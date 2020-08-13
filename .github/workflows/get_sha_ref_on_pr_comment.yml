@@ -41,8 +41,8 @@ jobs:
         # Is issue_comment and has something about pull_request
         if: github.event_name == 'issue_comment' && github.event.issue.pull_request != 0
         run: |
-          ::set-output name=boolean::true
-          ::set-output name=boolean_str::truth!
+          echo ::set-output name=boolean::true
+          echo ::set-output name=boolean_str::truth!
       - id: check_pr_comment
         run: |
           echo ${{ steps.is_pr_comment.outputs.boolean }}
