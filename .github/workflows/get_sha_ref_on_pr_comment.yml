@@ -18,10 +18,9 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - name: Test if this is a comment on master
-        run: ::error::I am a failure
-      - name: doIRun
-        run: echo "Did I run after the failure?"
+      - name: Fail if this is an issue_comment that is not on a PR
+        if: github.event_name == 'issue_comment' && contains(github.event.comment.html_url, '/pull/)
+        run: ::error::Caught issue without PR.  Fail to kill future dependencies
   prepare_git:
     runs-on: ubuntu-latest
     if: contains(github.event.comment.body, '/prepare-git') || github.event_name != 'issue_comment'
