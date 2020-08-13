@@ -1,0 +1,54 @@
+# Shows different ways of triggering on a PR's issue_comment keyword while guarding against triggering when outside a PR
+# Without any protection, triggering on issue_comment will trigger events on non-PR issues (which will run in context of master).
+# Demo includes triggering on pull_request as well, but this is not required.  Useful when in a workflow with both /triggered and 
+# PR-triggered stuff
+
+name: PR issue_comment /trigger
+on: 
+  pull_request:
+    branches: [master]
+  issue_comment:
+    types: [created]
+    
+jobs:
+  # Handle guard using a dependency that gets skipped.  If the skip_if_out_of_scope job does not run, neither will its dependencies.  
+  # Effectively this encapsulates the if statement into a "function", putting the logic in one place
+  skip_if_out_of_scope:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'issue_comment' || ( contains(github.event.comment.body, '/comment-on-pr') && github.event_name == 'issue_comment' && github.event.issue.pull_request != 0 )
+    steps:
+      - run: echo "Dummy so this can fire at all"
+  depend_on_skip_if_out_of_scope:
+    runs-on: ubuntu-latest
+    needs: [skip_if_out_of_scope]
+    steps:
+      - run: echo "If I ran, then my needs also ran"
+  depend_on_skip_if_out_of_scope_2:
+    runs-on: ubuntu-latest
+    needs: [skip_if_out_of_scope]
+    steps:
+      - run: echo "Same with me - and we only have the complex logic in one place"
+
+  # Handle guard against issue_comment outside PR as a step output.  Provides some encapsulation, but a bit more local
+  some_job:
+    runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, '/comment-on-pr') || github.event_name != 'issue_comment'
+    steps:
+      - id: is_pr_comment
+        # Is issue_comment and has something about pull_request
+        if: github.event_name == 'issue_comment' && github.event.issue.pull_request != 0
+        run: |
+          echo ::set-output name=boolean::true
+      - id: check_pr_comment
+        run: |
+          echo ${{ steps.is_pr_comment.outputs.boolean }}
+      # Now later steps can use this in their if statements
+      - id: dependent_step
+        if: steps.is_pr_comment.outputs.boolean
+        run: echo "I ran because of an upstream check passing!"
+      - id: dependent_step_2
+        if: steps.is_pr_comment.outputs.boolean
+        run: echo "I ran because of an upstream check passing too!"
+      - id: independent_step
+        run: echo "I ran regardless because I'm a rebel"
+  
