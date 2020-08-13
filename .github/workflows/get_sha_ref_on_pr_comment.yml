@@ -1,5 +1,7 @@
 # Workflow gets the SHA/Ref for both a PR (easy) and a comment (harder) and saves them for future use
-# Also checks out the relevant PR code, even if this is a comment (which would by default check out master's code)
+# Also checks out the relevant PR code, even if this is a comment (which would by default check out master's code).
+# Without any protection, triggering on issue_comment will trigger events on non-PR issues (which will run in context of master).
+# A few ways of guarding against this are demo'd.
 name: Get Git SHA/Ref on PR or Comment
 on: 
   # Fire when any PR activity happens (create, push new commit to PR branch, etc)
@@ -10,16 +12,17 @@ on:
     
 jobs:
   # Guards against triggering this workflow on an issue_comment that is not part of a PR (which would then run on master)
+  # Future jobs could need: this, and if it failed they wont run.  Will show up as a failure though in CI
   in_scope:
-    name: Check if trigger is in scope for this job
+    name: Fail if not comment on PR
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - name: Fail if this is an issue_comment that is not on a PR
-        if: github.event.issue.pull_request == 0
+      - name: Fail if this is an issue_comment that is not on a PR (pass on all other events)
+        if: github.event.issue.pull_request == 0 && github.event_name == 'issue_comment'
         run: ::error::Caught issue without PR.  Fail to kill future dependencies
   prepare_git:
     runs-on: ubuntu-latest
