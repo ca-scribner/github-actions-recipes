@@ -9,6 +9,13 @@ on:
     types: [created]
     
 jobs:
+  # Guards against triggering this workflow on an issue_comment that is not part of a PR (which would then run on master)
+  in_scope:
+    name: Check if trigger is in scope for this job
+    runs-on: ubuntu-latest
+    steps:
+      - name: failme
+        run: ::error::I am a failure
   prepare_git:
     runs-on: ubuntu-latest
     if: contains(github.event.comment.body, '/prepare-git') || github.event_name != 'issue_comment'
