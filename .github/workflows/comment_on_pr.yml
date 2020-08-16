@@ -66,13 +66,13 @@ jobs:
     steps:
       - name: Print context
         run: |
-          echo "needs.is_pr_comment.is_pr_comment = ${{ needs.is_pr_comment.is_pr_comment }}"
-          echo "needs.is_pr_comment.pr_number = ${{ needs.is_pr_comment.pr_number }}"
+          echo "needs.is_pr_comment.is_pr_comment = ${{ needs.is_pr_comment.outputs.is_pr_comment }}"
+          echo "needs.is_pr_comment.pr_number = ${{ needs.is_pr_comment.outputs.pr_number }}"
       - name: Run only if is_pr_comment
-        if: needs.is_pr_comment.is_pr_comment
+        if: needs.is_pr_comment.outputs.is_pr_comment
         run: echo "Look at me go!"
       - name: Run only if pr_number
-        if: needs.is_pr_comment.pr_number
+        if: needs.is_pr_comment.outputs.pr_number
         run: echo "Look at me go!"
 
 # Handle guard against issue_comment outside PR as a step output.  Provides some encapsulation, but a bit more local
