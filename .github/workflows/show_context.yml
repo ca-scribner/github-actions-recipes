@@ -1,0 +1,17 @@
+# Shows the github context of an action
+
+name: Show Context
+on: 
+  pull_request:
+    branches: [master]
+  issue_comment:
+    types: [created]
+
+jobs:
+  dump_context:
+    runs-on: ubuntu-latest
+    env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+    steps:
+      - name: Dump GitHub context
+        run: echo "$GITHUB_CONTEXT"
