@@ -13,13 +13,6 @@ on:
 jobs:
   # Handle guard using a dependency that gets skipped.  If the skip_if_out_of_scope job does not run, neither will its dependencies.  
   # Effectively this encapsulates the if statement into a "function", putting the logic in one place
-  dump_context:
-    runs-on: ubuntu-latest
-    env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-    steps:
-      - name: Dump GitHub context
-        run: echo "$GITHUB_CONTEXT"
   skip_if_out_of_scope:
     runs-on: ubuntu-latest
     if: github.event_name != 'issue_comment' || ( contains(github.event.comment.body, '/comment-on-pr') && github.event_name == 'issue_comment' && github.event.issue.pull_request != 0 )
