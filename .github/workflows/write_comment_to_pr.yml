@@ -1,5 +1,5 @@
 # Writing a comment back to the PR/Issue that triggered this event
-# Triggers on PR to master or issue_comment of "/reply-to-me" anywhere
+# Triggers on an issue_comment of "/reply-to-me" anywhere
 
 name: Respond with Comment
 
@@ -22,5 +22,6 @@ jobs:
              -X POST -d '{"body": "Hello, world!  I come to you via curl"}' \
              "https://api.github.com/repos/${REPO}/issues/${PR_NUM}/comments"
       env: 
+        # Getting PR_NUM like this works for an issue_comment, but not a PR create
         PR_NUM: ${{ github.event.issue.number }}
         REPO: ${{ github.repository }}
