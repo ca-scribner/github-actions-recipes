@@ -1,0 +1,26 @@
+# Writing a comment back to the PR/Issue that triggered this event
+# Triggers on PR to master or issue_comment of "/reply-to-me" anywhere
+
+name: Respond with Comment
+
+on: 
+  pull_request:
+    branches: [master]
+  issue_comment:
+    types: [created]
+    
+jobs:
+  respond:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'issue_comment' || contains(github.event.comment.body, '/reply-to-me'
+    steps:
+    - name: Write a comment back
+      run: |
+        echo PR_NUM = $PR_NUM
+        echo REPO = $REPO
+        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+             -X POST -d '{"body": "Hello, world!  I come to you via curl"}' \
+             "https://api.github.com/repos/${REPO}/issues/${PR_NUM}/comments"
+      env: 
+        PR_NUM: ${{ github.event.issue.number }}
+        REPO: ${{ github.repository }}
