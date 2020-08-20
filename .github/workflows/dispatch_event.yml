@@ -16,6 +16,19 @@ jobs:
     - name: Copy Repository Contents
       uses: actions/checkout@master
 
+    - name: Handle Repo Dispatch Payload
+      id: rd
+      run: |
+        echo event_type = "${{ github.event.action }}"
+        echo event.client_payload = "${{ toJson(github.event.client_payload) }}"
+
+    - name: Handle Different Repo Dispatch Event
+      id: rd_2
+      if: github.event.action == "my_print_comment_dispatch_event"
+      run: |
+        echo event.client_payload.comment = "${{ github.event.client_payload.comment }}"
+    # We can also set up a python script or other code that handles the dispatching
+    # This example is from https://github.com/kaizentm/kubemlops
     # - name: Set up Python 3.7
     #   uses: actions/setup-python@v1
     #   with:
@@ -32,9 +45,3 @@ jobs:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #     KFP_DSHB: ${{ secrets.KFP_DSHB }}
     #   working-directory: .github/events
-    - name: Handle Repo Dispatch Payload
-      id: rd
-      run: |
-        echo event_type = "${{ github.event.action }}"
-        echo event.client_payload = "${{ toJson(github.event.client_payload) }}"
-        echo event.client_payload.comment = "${{ github.event.client_payload.comment }}"
