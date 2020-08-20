@@ -24,7 +24,7 @@ jobs:
 
     - name: Handle Different Repo Dispatch Event
       id: rd_2
-      if: github.event.action == "my_print_comment_dispatch_event"
+      if: github.event.action == 'my_print_comment_dispatch_event'
       run: |
         echo event.client_payload.comment = "${{ github.event.client_payload.comment }}"
     # We can also set up a python script or other code that handles the dispatching
