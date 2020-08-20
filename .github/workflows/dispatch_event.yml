@@ -1,0 +1,39 @@
+# Handler of repository_dispatch events (events from external sources)
+
+name: Receive Repository Dispatch Payload
+# The pipeline is triggered on:
+#  - Repository Dispatch
+on: repository_dispatch
+
+jobs:
+  process-repository-dispatch:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Dump GitHub context
+      run: echo "$GITHUB_CONTEXT"
+      
+    - name: Copy Repository Contents
+      uses: actions/checkout@master
+
+    # - name: Set up Python 3.7
+    #   uses: actions/setup-python@v1
+    #   with:
+    #     python-version: 3.7
+
+    # - name: Install Python dependencies
+    #   run: |
+    #     pip3 install requests --upgrade
+    # - name: Handle Repo Dispatch Payload
+    #   id: rd
+    #   run: |
+    #     python3 event_dispatcher.py --event_type "${{ github.event.action }}"
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     KFP_DSHB: ${{ secrets.KFP_DSHB }}
+    #   working-directory: .github/events
+    - name: Handle Repo Dispatch Payload
+      id: rd
+      run: |
+        echo event_type = "${{ github.event.action }}"
+        echo event client_payload = "${{ github.event.client_payload"
