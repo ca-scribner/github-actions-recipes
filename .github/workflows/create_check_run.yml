@@ -1,3 +1,6 @@
+# More recipes here: 
+# https://github.com/LouisBrunner/checks-action/blob/master/.github/workflows/examples.yml
+
 name: "Create Check Run"
 on: 
   push:
@@ -9,8 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/create-outputs@v0.0.0-fake
-      id: test
     - uses: LouisBrunner/checks-action@v0.1.0
       if: always()
       with:
@@ -19,4 +20,26 @@ jobs:
         conclusion: ${{ job }}
         # Output is a JSON string
         output: |
-          {"summary": ${{ steps.test.outputs.summary }}, "text_description": ${{ steps.test.outputs.description }} }
+          {"summary": "This is a summary", "text_description": "This is a text description"}
+        images: |
+          [{"alt":"Cool pic","image_url":"https://via.placeholder.com/150","caption":"Cool description"}]
+          
+  test_with_images_from_run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - id: images
+      run: |
+        echo ::set-output name=value::$IMAGES
+      env:
+        IMAGES: |
+          {"alt":"Cool pic","image_url":"https://via.placeholder.com/150","caption":"Cool description"}
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test With Images From Run
+        conclusion: success
+        # output.summary is required with actions!
+        output: |
+          {"summary":"Some warnings in README.md"}
+        images: ${{ steps.images.outputs.value }}
