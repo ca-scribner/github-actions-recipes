@@ -1,6 +1,6 @@
 name: "Create Check Run"
 on: 
-  push
+  push:
   issue_comment:
     types: [created]
 
