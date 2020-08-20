@@ -36,4 +36,5 @@ jobs:
       id: rd
       run: |
         echo event_type = "${{ github.event.action }}"
-        echo event client_payload = "${{ github.event.client_payload }}"
+        echo event.client_payload = "${{ toJson(github.event.client_payload) }}"
+        echo event.client_payload.comment = "${{ github.event.client_payload.comment }}"
