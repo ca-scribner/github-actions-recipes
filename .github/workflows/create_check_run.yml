@@ -17,6 +17,6 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test XYZ
         conclusion: ${{ job }}
-        output:
-          summary: ${{ steps.test.outputs.summary }}
-          text_description: ${{ steps.test.outputs.description }}
+        # Output is a JSON string
+        output: |
+          {"summary": ${{ steps.test.outputs.summary }}, "text_description": ${{ steps.test.outputs.description }} }
