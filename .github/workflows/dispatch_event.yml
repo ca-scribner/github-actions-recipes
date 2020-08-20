@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Dump GitHub context
-      run: echo "$GITHUB_CONTEXT"
+      run: echo "${{ toJson(github) }}"
       
     - name: Copy Repository Contents
       uses: actions/checkout@master
