@@ -27,21 +27,3 @@ jobs:
       if: github.event.action == 'my_print_comment_dispatch_event'
       run: |
         echo event.client_payload.comment = "${{ github.event.client_payload.comment }}"
-    # We can also set up a python script or other code that handles the dispatching
-    # This example is from https://github.com/kaizentm/kubemlops
-    # - name: Set up Python 3.7
-    #   uses: actions/setup-python@v1
-    #   with:
-    #     python-version: 3.7
-
-    # - name: Install Python dependencies
-    #   run: |
-    #     pip3 install requests --upgrade
-    # - name: Handle Repo Dispatch Payload
-    #   id: rd
-    #   run: |
-    #     python3 event_dispatcher.py --event_type "${{ github.event.action }}"
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #     KFP_DSHB: ${{ secrets.KFP_DSHB }}
-    #   working-directory: .github/events
