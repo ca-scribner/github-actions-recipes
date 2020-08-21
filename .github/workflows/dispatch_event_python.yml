@@ -1,0 +1,36 @@
+# Handler of repository_dispatch events (events from external sources)
+
+name: Receive Repository Dispatch Payload
+# The pipeline is triggered on:
+#  - Repository Dispatch
+on: repository_dispatch
+
+jobs:
+  process-repository-dispatch-via-python:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dump GitHub context
+      run: echo "${{ toJson(github) }}"
+      
+    - name: Copy Repository Contents
+      uses: actions/checkout@master
+
+#     This example is from https://github.com/kaizentm/kubemlops
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+
+    - name: Install Python dependencies
+      run: |
+        pip3 install requests --upgrade
+    - name: Handle Repo Dispatch Payload
+      id: rd
+      run: |
+        python3 event_dispatcher.py --event_type "${{ github.event.action }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # This example was taken from a Kubeflow Pipelines example
+#         KFP_DSHB: ${{ secrets.KFP_DSHB }}
+        KFP_DSHB: https://kubeflow.covid.cloud.statcan.ca/ 
+      working-directory: .github/events
