@@ -6,7 +6,7 @@ from dispatch_event_handler import BaseDispatchEventHandler
 class StartEventHandler(BaseDispatchEventHandler):
 
     MODEL_START_COMMENT = \
-        "Model training has started\n" \
+        "!!!!!!!!!!!!!!!!!!Model training has started\n" \
         "Run ID: {run_id}\n" \
         "See details at: [link]({run_link})\n" \
         "Commit sha: {sha}" \
