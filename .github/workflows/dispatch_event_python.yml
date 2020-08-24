@@ -22,7 +22,6 @@ jobs:
         echo "::set-output name=event_ref::$event_ref"
 
     - name: Checkout PR code
-      if: github.event_name == 'issue_comment'
       run: |
          git fetch origin ${{ steps.get_event_ref.outputs.event_ref }}
          git checkout FETCH_HEAD
