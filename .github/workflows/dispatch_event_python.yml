@@ -16,7 +16,7 @@ jobs:
     - name: Get associated event ref
       id: get_event_ref
       run: |
-        event_ref="+refs/pull/${{ github.event.client_payload.client_payload.pr_num }}/merge"
+        event_ref="+refs/pull/${{ github.event.client_payload.pr_num }}/merge"
         echo "Writing $event_ref as output"
         echo "::set-output name=event_ref::$event_ref"
 
