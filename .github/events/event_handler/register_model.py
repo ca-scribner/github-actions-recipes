@@ -1,6 +1,6 @@
 import os
 import json
-from dispatch_event_handler import BaseDispatchEventHandler
+from event_handler.dispatch import BaseDispatchEventHandler
 
 
 class RegModelEventHandler(BaseDispatchEventHandler):

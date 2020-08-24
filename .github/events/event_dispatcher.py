@@ -1,8 +1,8 @@
 import argparse
-from dispatch_event_handler import BaseDispatchEventHandler
-from reg_model_event_handler import RegModelEventHandler
-from start_train_event_handler import StartEventHandler
-from finish_train_event_handler import FinishEventHandler
+from event_handler.dispatch import BaseDispatchEventHandler
+from event_handler.reg_model import RegModelEventHandler
+from event_handler.start_train import StartEventHandler
+from event_handler.finish_train import FinishEventHandler
 
 
 REGISTER_MODEL_EVENT = "Model is registered"
