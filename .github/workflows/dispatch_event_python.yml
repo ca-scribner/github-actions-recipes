@@ -1,6 +1,7 @@
 # Handler of repository_dispatch events (events from external sources)
-# Uses dispatcher code from the PR rather than master (lets you develop
-# the dispatcher).  Could use master by removing PR ref creation steps
+# If dispatch's client_payload includes .pr_num, the event_dispatcher.py
+# is loaded from the PR rather than master to enable on-branch development
+# Could use master by removing PR ref creation steps
 name: Receive Repository Dispatch Payload using Python
 # The pipeline is triggered on:
 #  - Repository Dispatch
@@ -13,15 +14,17 @@ jobs:
     - name: Dump GitHub context
       run: echo "${{ toJson(github) }}"
 
-    - uses: actions/checkout@v2
+    - name: Copy Repository Contents
+      uses: actions/checkout@v2
+
     - name: Checkout associated PR code if specified
       if: github.event.client_payload.pr_num
       id: checkout_pr_code
       run: |
         event_ref="+refs/pull/${{ github.event.client_payload.pr_num }}/merge"
-        echo "Writing $event_ref as output"
+        echo "Checking out $event_ref"
         echo "::set-output name=event_ref::$event_ref"
-        git fetch origin ${{ steps.get_event_ref.outputs.event_ref }}
+        git fetch origin $event_ref
         git checkout FETCH_HEAD
 
 #     This example is from https://github.com/kaizentm/kubemlops
