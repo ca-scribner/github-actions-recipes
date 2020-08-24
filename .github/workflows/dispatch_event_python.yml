@@ -14,27 +14,15 @@ jobs:
       run: echo "${{ toJson(github) }}"
 
     - uses: actions/checkout@v2
-    - name: Get associated event ref
-      id: get_event_ref
+    - name: Checkout associated PR code if specified
+      if: github.event.client_payload.pr_num
+      id: checkout_pr_code
       run: |
         event_ref="+refs/pull/${{ github.event.client_payload.pr_num }}/merge"
         echo "Writing $event_ref as output"
         echo "::set-output name=event_ref::$event_ref"
-
-    - name: Checkout PR code
-      run: |
-         git fetch origin ${{ steps.get_event_ref.outputs.event_ref }}
-         git checkout FETCH_HEAD
-#     - name: Copy Repository Contents
-#       uses: actions/checkout@v2
-#       with:
-#         # I think this is equivalent to doing 
-#         #   git fetch origin ${{ ...event_ref }}
-#         #   git checkout FETCH_HEAD
-#         ref: ${{ steps.get_event_ref.outputs.event_ref }}
-#       env:
-#         REPO: ${{ github.repository }}
-#         PR_NUM: ${{ steps.get_event_ref.outputs.pr_number }}
+        git fetch origin ${{ steps.get_event_ref.outputs.event_ref }}
+        git checkout FETCH_HEAD
 
 #     This example is from https://github.com/kaizentm/kubemlops
     - name: Set up Python 3.7
