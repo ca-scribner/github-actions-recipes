@@ -1,6 +1,6 @@
 import argparse
 from event_handler.dispatch import BaseDispatchEventHandler
-from event_handler.reg_model import RegModelEventHandler
+from event_handler.register_model import RegModelEventHandler
 from event_handler.start_train import StartEventHandler
 from event_handler.finish_train import FinishEventHandler
 
