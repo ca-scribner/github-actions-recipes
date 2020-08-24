@@ -12,11 +12,4 @@ curl -X POST \
   -H "Accept: application/vnd.github.v3+json" \
   -d '{"event_type": "my_dispatch_event", "client_payload": {"key1": "value1", "comment": "I have a lot of feels"}}' \
   https://api.github.com/repos/ca-scribner/github-actions-recipes/dispatches
-  
-# Triggers a specific part of the workflow
-curl -X POST \
-  -H "authorization: token SOME_GITHUB_TOKEN" \
-  -H "Accept: application/vnd.github.v3+json" \
-  -d '{"event_type": "my_print_comment_dispatch_event", "client_payload": {"key1": "value1", "comment": "I have a lot of feels"}}' \
-  https://api.github.com/repos/ca-scribner/github-actions-recipes/dispatches
 ```
