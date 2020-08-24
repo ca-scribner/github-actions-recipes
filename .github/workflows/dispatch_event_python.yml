@@ -13,6 +13,7 @@ jobs:
     - name: Dump GitHub context
       run: echo "${{ toJson(github) }}"
 
+    - uses: actions/checkout@v2
     - name: Get associated event ref
       id: get_event_ref
       run: |
