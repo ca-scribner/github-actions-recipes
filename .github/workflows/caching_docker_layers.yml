@@ -1,6 +1,6 @@
 # Shows the github context of an action
 
-name: Using Github Actions Cache
+name: Using Github Actions Cache for Docker Layers
 on: 
   pull_request:
     branches: [master]
