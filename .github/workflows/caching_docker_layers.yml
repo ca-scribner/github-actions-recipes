@@ -44,7 +44,8 @@ jobs:
       continue-on-error: true
       # Add key here for testing so I can easily test caches isolated by branch.  
       # .  Don't use this in real builds unless you want branch-isolation in caches
-      key: docker-layer-caching-${{ github.head_ref }}-{hash}
+      with: 
+        key: docker-layer-caching-${{ github.head_ref }}-{hash}
 
     # Should take ~1min?
     - name: Build the docker image (1)
@@ -70,7 +71,8 @@ jobs:
       continue-on-error: true
       # Add key here for testing so I can easily test caches isolated by branch.  
       # .  Don't use this in real builds unless you want branch-isolation in caches
-      key: docker-layer-caching-${{ github.head_ref }}-{hash}
+      with: 
+        key: docker-layer-caching-${{ github.head_ref }}-{hash}
 
     # Should take a few seconds because everything is cached
     - name: Build the docker image (1)
