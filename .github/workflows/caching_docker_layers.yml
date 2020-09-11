@@ -1,0 +1,85 @@
+# Shows the github context of an action
+
+name: Using Github Actions Cache
+on: 
+  pull_request:
+    branches: [master]
+
+jobs:
+  dump_context:
+    runs-on: ubuntu-latest
+    env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+    steps:
+      - name: Dump GitHub context
+        run: echo "$GITHUB_CONTEXT"
+
+  without_cache:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v2
+
+    # Should take ~1min?
+    - name: Build the docker image (1)
+      working-directory: caching_docker_layers/sleep_1
+      run: |
+        docker build .
+
+    # Should take a few seconds because almost everything is shared with prev build
+    - name: Build the docker image (2)
+      working-directory: caching_docker_layers/sleep_2
+      run: |
+        docker build .
+
+  create_cache:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v2
+
+    # cache docker layers
+    - uses: satackey/action-docker-layer-caching@v0.0.8
+      # Ignore the failure of a step and avoid terminating the job.  <-- why?
+      continue-on-error: true
+      # Add key here for testing so I can easily test caches isolated by branch.  
+      # .  Don't use this in real builds unless you want branch-isolation in caches
+      key: docker-layer-caching-${{ github.head_ref }}-{hash}
+
+    # Should take ~1min?
+    - name: Build the docker image (1)
+      working-directory: caching_docker_layers/sleep_1
+      run: |
+        docker build .
+
+    # Should take a few seconds because almost everything is shared with prev build
+    - name: Build the docker image (2)
+      working-directory: caching_docker_layers/sleep_2
+      run: |
+        docker build .
+
+  use_cache:
+    runs-on: ubuntu-latest
+    needs: [create_cache]
+    steps:
+
+    - uses: actions/checkout@v2
+
+    # cache docker layers (or really, use existing cached layers)
+    - uses: satackey/action-docker-layer-caching@v0.0.8
+      continue-on-error: true
+      # Add key here for testing so I can easily test caches isolated by branch.  
+      # .  Don't use this in real builds unless you want branch-isolation in caches
+      key: docker-layer-caching-${{ github.head_ref }}-{hash}
+
+    # Should take a few seconds because everything is cached
+    - name: Build the docker image (1)
+      working-directory: caching_docker_layers/sleep_1
+      run: |
+        docker build .
+
+    # Should take a few seconds because everything is cached
+    - name: Build the docker image (2)
+      working-directory: caching_docker_layers/sleep_2
+      run: |
+        docker build .
