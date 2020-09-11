@@ -1,6 +1,4 @@
-FROM python:3.8.5-buster
-
-RUN pip install numpy==1.18
+FROM alpine
 
 RUN sleep 15
 
