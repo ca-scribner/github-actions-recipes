@@ -1,0 +1,30 @@
+# Quick test to see if hyphens can be in action step id's
+
+name: Show Context
+on: 
+  pull_request:
+    branches: [master]
+  issue_comment:
+    types: [created]
+
+jobs:
+  dump_context:
+    runs-on: ubuntu-latest
+    env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+    steps:
+      - name: Dump GitHub context
+        run: echo "$GITHUB_CONTEXT"
+
+  test_hyphen:
+    runs-on: ubuntu-latest
+    env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+    steps:
+      - name: Output something
+        id: output-something
+        run: echo "::set-output name=boolean::true"
+
+      - name: Consume something
+        id: consume-something
+        run: echo "above output: ${{ steps.output-something.outputs.boolean}}"
