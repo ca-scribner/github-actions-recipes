@@ -1,6 +1,6 @@
 # Quick test to see if hyphens can be in action step id's
 
-name: Show Context
+name: Test Hyphens
 on: 
   pull_request:
     branches: [master]
