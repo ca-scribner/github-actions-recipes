@@ -27,4 +27,4 @@ jobs:
 
       - name: Consume something
         id: consume-something
-        run: echo "above output: ${{ steps.output-something.outputs.boolean}}"
+        run: echo "above output is ${{ steps.output-something.outputs.boolean}}"
