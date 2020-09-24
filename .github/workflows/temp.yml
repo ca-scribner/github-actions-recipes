@@ -1,6 +1,6 @@
 # Shows the github context of an action
 
-name: Show Context
+name: Test working dir location
 on: 
   pull_request:
     branches: [master]
@@ -15,3 +15,12 @@ jobs:
     steps:
       - name: Dump GitHub context
         run: echo "$GITHUB_CONTEXT"
+      
+      - name: Dump runner context
+        run: |
+          echo "${{ toJson(runner) }}"
+          echo $test_env
+        env:
+          test_env: ${{ runner.temp }}
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
