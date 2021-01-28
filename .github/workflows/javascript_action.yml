@@ -14,11 +14,15 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Hello world action step
-        uses: ./javascript-action-tutorial/ # Uses an action in this directory
-        id: hello
+      - uses: ./javascript-action-tutorial/ # Uses an action in this directory
+        id: comment_context
         with:
-          who-to-greet: 'Mona the Octocat'
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+          allowed_author_associations: '[OWNER, COLLABORATOR]'
+      - name: Get allowed_author
+        run: echo "The value of allowed_author is ${{ steps.comment_context.outputs.allowed_author }}"
+      - name: Get is_pr_comment
+        run: echo "The value of is_pr_comment is ${{ steps.comment_context.outputs.is_pr_comment }}"
+      - name: Get pr_number
+        run: echo "The value of pr_number is ${{ steps.comment_context.outputs.pr_number }}"
+      - name: Get from_pr_originator
+        run: echo "The value of from_pr_originator is ${{ steps.comment_context.outputs.from_pr_originator }}"

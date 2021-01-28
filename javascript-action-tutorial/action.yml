@@ -1,13 +1,19 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'PR Comment Context'
+description: 'Extracts some context from a comment, specifically comments on a PR'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
-    required: true
-    default: 'World'
+  allowed_author_associations:
+    description: 'Specify which author associations to the repo are accepted.  This determines the author associations used for setting output 'allowed-author' and is useful for restricting /triggers to only fire for some users. Input is in JSON array syntax.  Default is [OWNER, COLLABORATOR, NONE], which includes any comment author'
+    required: false
+    default: '[OWNER, COLLABORATOR, NONE]'
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  allowed_author:
+    description: 'Boolean true or false of whether comment author has an allowed association'
+  is_pr_comment: 
+    description: 'Boolean true or false of whether the comment was on a pr'
+  pr_number: 
+    description: 'If comment is on a PR, returns the PR number.  Else null'
+  from_pr_originator: 
+    description: 'If comment is on a PR, returns boolean of whether comment is from PR originator.  Else null'
 runs:
   using: 'node12'
   main: 'index.js'
