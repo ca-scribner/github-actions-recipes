@@ -15,7 +15,7 @@ outputs:
   from_pr_originator: 
     description: 'If comment is on a PR, returns boolean of whether comment is from PR originator.  Else null'
   event_ref:
-    description: 'If comment is on a PR, returns a github event_ref-like string for the PR rather than default branch (by default, event_ref of a issue comment always points to the default branch (typically master) rather than the branch of the PR we're commenting on)'
+    description: 'If comment is on a PR, returns a github event_ref-like string for the PR rather than default branch (by default, event_ref of a issue comment always points to the default branch (typically master) rather than the branch of the PR we are commenting on)'
 runs:
   using: 'node12'
   main: 'index.js'
