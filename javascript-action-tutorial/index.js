@@ -8,11 +8,12 @@ try {
   console.log(`Now on to the fun stuff!`);
   var is_pr_comment = false;
   var pr_number = null;
-  if (github.context.eventName == "issue_comment" && github.context.event.issue.hasOwnProperty("pull_request") ) {
+  if (github.context.eventName == "issue_comment" && github.context.payload.issue.hasOwnProperty("pull_request") ) {
     is_pr_comment = true;
-    console.log(`The pr url is: ${github.context.event.issue.pull_request.html_url}`)
-    const start_index = github.context.event.issue.pull_request.html_url.lastIndexOf('/') + 1
-    pr_number = github.context.event.issue.pull_request.html_url.substring(start_index)
+    const issue = github.context.payload.issue
+    console.log(`The pr url is: ${issue.pull_request.html_url}`)
+    const start_index = issue.pull_request.html_url.lastIndexOf('/') + 1
+    pr_number = issue.pull_request.html_url.substring(start_index)
     console.log(`The pr number is: ${pr_number}`)
   } else {
     console.log(`missed the if statement`)
