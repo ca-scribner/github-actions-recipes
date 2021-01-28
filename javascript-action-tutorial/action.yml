@@ -2,7 +2,7 @@ name: 'PR Comment Context'
 description: 'Extracts some context from a comment, specifically comments on a PR'
 inputs:
   allowed_author_associations:
-    description: 'Specify which author associations to the repo are accepted.  This determines the author associations used for setting output 'allowed-author' and is useful for restricting /triggers to only fire for some users. Input is in JSON array syntax.  Default is [OWNER, COLLABORATOR, NONE], which includes any comment author'
+    description: 'Specify which author associations to the repo are accepted.  This determines the author associations used for setting output "allowed-author" and is useful for restricting /triggers to only fire for some users. Input is in JSON array syntax.  Default is [OWNER, COLLABORATOR, NONE], which includes any comment author'
     required: false
     default: '[OWNER, COLLABORATOR, NONE]'
 outputs:
