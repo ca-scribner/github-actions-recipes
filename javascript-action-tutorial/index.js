@@ -1,8 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-OWNER, COLLABORATOR, NONE
-
 try {
   console.log('Testing if this action occurs due to an issue comment')
   const allowed_author_associations = JSON.core.getInput('allowed_author_associations')
