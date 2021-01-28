@@ -1,6 +1,7 @@
+name: Test javascript actions
 on: 
-  push:
-    branches: [master]
+  # push:
+  #   branches: [master]
   issue_comment:
     types: [created]
 
