@@ -3,7 +3,7 @@ const github = require('@actions/github');
 
 try {
   console.log('Testing if this action occurs due to an issue comment')
-  const allowed_author_associations = JSON.core.getInput('allowed_author_associations')
+  const allowed_author_associations = JSON.parse(core.getInput('allowed_author_associations'))
 
   var is_pr_comment = false;
   var pr_number = null;
