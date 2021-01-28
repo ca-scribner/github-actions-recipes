@@ -8,7 +8,7 @@ on:
     types: [created]
 
 jobs:
-  hello_world_job:
+  test_pr_comment_context:
     runs-on: ubuntu-latest
     name: Testing PR Comment Context
     steps:
@@ -28,7 +28,7 @@ jobs:
         run: echo "The value of pr_number is ${{ steps.comment_context.outputs.pr_number }}"
       - name: Get from_pr_originator
         run: echo "The value of from_pr_originator is ${{ steps.comment_context.outputs.from_pr_originator }}"
-  hello_world_job:
+  test_event_ref:
     runs-on: ubuntu-latest
     name: Testing Get Event Ref on PR
     steps:
