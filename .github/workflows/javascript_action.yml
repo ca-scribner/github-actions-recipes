@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Hello world action step
-        uses: ./javascript_action_tutorial/ # Uses an action in this directory
+        uses: ./javascript-action-tutorial/ # Uses an action in this directory
         id: hello
         with:
           who-to-greet: 'Mona the Octocat'
