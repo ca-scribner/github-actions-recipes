@@ -10,6 +10,11 @@ try {
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
   console.log(`The event payload: ${payload}`);
+  const context = JSON.stringify(github.context, undefined, 2)
+  console.log(`The entire github context: ${context}`);
+  console.log(`The event_name: ${github.context.event_name}`)
+  // think this could be empty too
+  console.log(`The PR url: ${github.context.event.issue.pull_request.html_url}`)
 } catch (error) {
   core.setFailed(error.message);
 }
