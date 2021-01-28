@@ -8,9 +8,14 @@ try {
   console.log(`Now on to the fun stuff!`);
   var is_pr_comment = false;
   var pr_number = null;
-  if (github.context.event_name == "issue_comment" && github.context.event.issue.pull_request != 0 ) {
+  if (github.context.event_name == "issue_comment" && github.context.event.issue.pull_request ) {
     is_pr_comment = true;
     console.log(`The pr url is: ${github.context.event.issue.pull_request.html_url}`)
+    const start_index = github.context.event.issue.pull_request.html_url.lastIndexOf('/') + 1
+    pr_number = github.context.event.issue.pull_request.html_url.substring(start_index)
+    console.log(`The pr number is: ${pr_number}`)
+  } else {
+    console.log(`missed the if statement`)
   }
   // // `who-to-greet` input defined in action metadata file
   // const nameToGreet = core.getInput('who-to-greet');
