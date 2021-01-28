@@ -1,4 +1,8 @@
-on: [push]
+on: 
+  push:
+    branches: [master]
+  issue_comment:
+    types: [created]
 
 jobs:
   hello_world_job:
