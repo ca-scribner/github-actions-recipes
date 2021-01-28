@@ -1,0 +1,9 @@
+name: 'Get event_ref'
+description: 'If this activates on an issue_comment on a PR this returns the event_ref for the PR (not the default branch).  Otherwise it returns the default github event_ref'
+outputs:
+  event_ref:
+    description: 'The event_ref string'
+runs:
+  using: 'node12'
+  main: 'index.js'
+  

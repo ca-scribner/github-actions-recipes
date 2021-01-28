@@ -8,13 +8,13 @@ on:
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Testing PR Comment Context
     steps:
       # To use this repository's private action,
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: ./javascript-action-tutorial/ # Uses an action in this directory
+      - uses: ./get-pr-comment-context/ # Uses an action in this directory
         id: comment_context
         with:
           allowed_author_associations: '[OWNER, COLLABORATOR]'
@@ -26,3 +26,15 @@ jobs:
         run: echo "The value of pr_number is ${{ steps.comment_context.outputs.pr_number }}"
       - name: Get from_pr_originator
         run: echo "The value of from_pr_originator is ${{ steps.comment_context.outputs.from_pr_originator }}"
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: Testing Get Event Ref on PR
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: ./get-event-ref-on-pr/
+        id: event_ref
+      - name: Get event_ref
+        run: echo "The value of event_ref (from custom event_ref grabber) is ${{ steps.event_ref.outputs.event_ref }} (vs ${{ github.ref}})"

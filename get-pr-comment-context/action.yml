@@ -1,0 +1,22 @@
+name: 'PR Comment Context'
+description: 'Extracts some context from a comment, specifically comments on a PR'
+inputs:
+  allowed_author_associations:
+    description: 'Specify which author associations to the repo are accepted.  This determines the author associations used for setting output "allowed-author" and is useful for restricting /triggers to only fire for some users. Input is in JSON array syntax.  Default is [OWNER, COLLABORATOR, NONE], which includes any comment author'
+    required: false
+    default: '[OWNER, COLLABORATOR, NONE]'
+outputs:
+  allowed_author:
+    description: 'Boolean true or false of whether comment author has an allowed association'
+  is_pr_comment: 
+    description: 'Boolean true or false of whether the comment was on a pr'
+  pr_number: 
+    description: 'If comment is on a PR, returns the PR number.  Else null'
+  from_pr_originator: 
+    description: 'If comment is on a PR, returns boolean of whether comment is from PR originator.  Else null'
+  event_ref:
+    description: 'If comment is on a PR, returns a github event_ref-like string for the PR rather than default branch (by default, event_ref of a issue comment always points to the default branch (typically master) rather than the branch of the PR we're commenting on)'
+runs:
+  using: 'node12'
+  main: 'index.js'
+  
