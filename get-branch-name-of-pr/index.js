@@ -2,6 +2,7 @@
 
 const core = require('@actions/core');
 const github = require('@actions/github');
+const fetch = require("node-fetch");
 
 async function fetchName(owner, repository, pr_number) {
         try {
