@@ -18,7 +18,7 @@ async function fetchName(owner, repository, pr_number) {
           console.log(`pr_data = ${pr_data}`)
           return pr_data.head.ref;
         } catch (error) {
-            console.error(error);
+            throw(error);
         }
     }
 
