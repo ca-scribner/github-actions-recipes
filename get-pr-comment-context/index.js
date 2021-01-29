@@ -7,7 +7,7 @@ try {
   console.log('Testing if this action occurs due to an issue comment')
   const allowed_author_associations = core.getInput('allowed_author_associations')
 
-  var is_pr_comment = false;
+  var is_pr_comment = null;
   var pr_number = null;
   var is_comment_from_originator = null;
   var is_allowed_author = null
