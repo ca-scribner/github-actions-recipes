@@ -17,19 +17,22 @@ async function fetchName(owner, repository, pr_number) {
         }
     }
 
+async function main() {
+  try {
+    const owner = core.getInput('owner')
+    const repository = core.getInput('repository')
+    const pr_number = core.getInput('pr_number')
+    console.log(`Getting branch name of PR ${owner}/${repository}/${pr_number}`)
 
+    const branch_name = await fetchName(owner, repository, pr_number)
+    console.log(`Got branch name: ${branch_name}`)
+  } catch (error) {
+    core.setFailed(error.message);
+  }
 
-try {
-  const owner = core.getInput('owner')
-  const repository = core.getInput('repository')
-  const pr_number = core.getInput('pr_number')
-  console.log(`Getting branch name of PR ${owner}/${repository}/${pr_number}`)
-
-  const branch_name = await fetchName(owner, repository, pr_number)
-  console.log(`Got branch name: ${branch_name}`)
-} catch (error) {
-  core.setFailed(error.message);
 }
+
+main()
 
 //   const Http = new XMLHttpRequest()
 //   const github_url='https://api.github.com/repos'
