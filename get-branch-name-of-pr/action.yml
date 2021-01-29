@@ -14,6 +14,6 @@ outputs:
   branch:
     description: 'Name of the branch for this PR'
 runs:
-  using: 'node14'
+  using: 'node12'
   main: 'index.js'
   
