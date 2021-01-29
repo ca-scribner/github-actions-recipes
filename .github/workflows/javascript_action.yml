@@ -52,8 +52,10 @@ jobs:
       - uses: ./get-branch-name-of-pr/
         id: get-branch-name-of-pr
         with: 
-          owner: 'ca-scribner'
-          repository: 'github-actions-recipes'
+          owner: github.event.repository.owner.login
+          repository: github.event.repository.name
+#           owner: 'ca-scribner'
+#           repository: 'github-actions-recipes'
           pr_number: ${{ needs.test_pr_comment_context.outputs.pr_number }}
       - name: Show branch name
         run: echo "The value of branch name is ${{ steps.get-branch-name-of-pr }}"
