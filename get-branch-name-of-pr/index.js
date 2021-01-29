@@ -3,7 +3,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-async fetchName(owner, repository, pr_number) {
+async function fetchName(owner, repository, pr_number) {
         try {
           const github_url='https://api.github.com/repos'
           const url=`${github_url}/${owner}/${repository}/pulls/${pr_number}`
