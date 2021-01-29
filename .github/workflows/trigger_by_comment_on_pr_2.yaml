@@ -29,21 +29,21 @@ jobs:
         run: echo "The value of from_pr_originator is ${{ steps.pr_comment_context.outputs.from_pr_originator }}"
 
       - name: Check if trigger is in scope (hits trigger word and is an in-scope author)
-      id: am_i_in_scope
-      shell: bash
-      run: |
-        # In scope if push or if PR-comment saying "/deploy" from a contributor/owner
-        if   [ ${{ github.event_name }} == "push" ] \
-          || (     [ ${{ steps.pr_comment_context.outputs.is_pr_comment }} == "true" ] \
-                && [ ${{ steps.pr_comment_context.outputs.allowed_author }} == "true" ] \
-                && [ "${{ github.event.comment.body }}" == "/deploy" ]); then
-            echo trigger is in scope
-            echo "::set-output name=in_scope::true"
-            echo "pretend to set-output name=in_scope::true"
-        else
-            echo trigger is out of scope
-            # echo "::set-output name=in_scope::false"  # Don't set anything if false
-        fi
+        id: am_i_in_scope
+        shell: bash
+        run: |
+          # In scope if push or if PR-comment saying "/deploy" from a contributor/owner
+          if   [ ${{ github.event_name }} == "push" ] \
+            || (     [ ${{ steps.pr_comment_context.outputs.is_pr_comment }} == "true" ] \
+                  && [ ${{ steps.pr_comment_context.outputs.allowed_author }} == "true" ] \
+                  && [ "${{ github.event.comment.body }}" == "/deploy" ]); then
+              echo trigger is in scope
+              echo "::set-output name=in_scope::true"
+              echo "pretend to set-output name=in_scope::true"
+          else
+              echo trigger is out of scope
+              # echo "::set-output name=in_scope::false"  # Don't set anything if false
+          fi
 
       - name: Respond by comment
         id: respond
