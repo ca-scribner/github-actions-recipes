@@ -54,4 +54,4 @@ jobs:
           repository: 'github-actions-recipes'
           pr_number: ${{ needs.test_pr_comment_context.outputs.pr_number }}
       - name: Show branch name
-        run: echo "The value of branch name is ${{ stpes.get-branch-name-of-pr }}"
+        run: echo "The value of branch name is ${{ steps.get-branch-name-of-pr }}"
