@@ -1,23 +1,12 @@
-# TODO!  Not up to date
+# Summary
 
-# Hello world javascript action
+This action returns the name of the branch associated with a pull request
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log.
+# Example usage
 
-## Inputs
-
-### `who-to-greet`
-
-**Required** The name of the person to greet. Default `"World"`.
-
-## Outputs
-
-### `time`
-
-The time we greeted you.
-
-## Example usage
-
-uses: actions/hello-world-javascript-action@v1.1
-with:
-  who-to-greet: 'Mona the Octocat'
+uses: ca-scribner/github-actions-recipes/get-branch-name-of-pr@master
+  id: get-branch-name-of-pr
+  with: 
+    owner: 'ca-scribner'
+    repository: 'github-actions-recipes'
+    pr_number: 21

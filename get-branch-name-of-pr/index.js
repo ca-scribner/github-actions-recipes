@@ -1,4 +1,4 @@
-// Tests whether a comment is on a PR and if it is, returns the PR number and some metadata about the comment author relative to the PR
+// Returns the name of the branch associated with a PR
 
 const core = require('@actions/core');
 const github = require('@actions/github');
@@ -16,7 +16,6 @@ async function fetchName(owner, repository, pr_number) {
                 method: 'GET',
             });
           const pr_data = await response.json();
-          console.log(`pr_data = ${pr_data}`)
           return pr_data.head.ref;
         } catch (error) {
             throw(error);
@@ -39,22 +38,3 @@ async function main() {
 }
 
 main()
-
-//   const Http = new XMLHttpRequest()
-//   const github_url='https://api.github.com/repos'
-//   const url=`${github_url}/${owner}/${repository}/pulls/${pr_number}`
-
-//   fetch(url)
-//     .then(function (response) {
-//       return response.json();
-//     })
-//     .then(function (myJson) {
-//       console.log(myJson.head);
-//     })
-//     .catch(function (error) {
-//       console.log("Error: " + error);
-//     });
-
-//   Http.open("GET", url)
-//   Http.send()
-
