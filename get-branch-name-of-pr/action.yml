@@ -1,0 +1,19 @@
+name: 'Get Branch Name of PR'
+description: 'Uses Github API to return the branch name of a PR'
+inputs:
+  owner:
+    description: 'Repository owner'
+    required: true
+  repository:
+    description: 'Repository name'
+    required: true
+  pr_number:
+    description: 'PR number to query for branch name'
+    required: true
+outputs:
+  branch:
+    description: 'Name of the branch for this PR'
+runs:
+  using: 'node14'
+  main: 'index.js'
+  
