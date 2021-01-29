@@ -45,18 +45,27 @@ jobs:
               # echo "::set-output name=in_scope::false"  # Don't set anything if false
           fi
 
+      - name: Set an env var
+        run: echo "SOME_ENV_VAR=1234567890" >> $GITHUB_ENV
+
       - name: Respond by comment
         id: respond
         uses: actions/github-script@v1
         with: 
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            var SOME_VAR = process.env.LOCAL_SOME_ENV_VAR
+            var IN_SCOPE = process.env.IN_SCOPE
+
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `Build activated.  Track in [Github Actions](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/)`
+              body: `Build activated.  Track in [Github Actions](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/).  Also look I can use variables! ${SOME_VAR} ${IN_SCOPE}`
             })
+        env: 
+          IN_SCOPE: ${{ steps.am_i_in_scope.outputs.in_scope }}
+          LOCAL_SOME_ENV_VAR: ${{ env.SOME_ENV_VAR }}
 
   get_in_scope:
     needs: test_pr_comment_context
