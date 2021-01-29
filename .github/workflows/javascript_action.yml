@@ -11,6 +11,8 @@ jobs:
   test_pr_comment_context:
     runs-on: ubuntu-latest
     name: Testing PR Comment Context
+    outputs:
+      pr_number: ${{ steps.comment_context.outputs.pr_number }}
     steps:
       # To use this repository's private action,
       # you must check out the repository
@@ -40,3 +42,16 @@ jobs:
         id: event_ref
       - name: Get event_ref
         run: echo "The value of event_ref (from custom event_ref grabber) is ${{ steps.event_ref.outputs.event_ref }} (vs ${{ github.ref}})"
+  test_get_pr_branch_name:
+    needs: test_pr_comment_context
+    runs-on: ubuntu-latest
+    name: Testing Getting Branch Name of PR
+    steps:
+      - uses: ./get-branch-name-of-pr/
+        id: get-branch-name-of-pr
+        with: 
+          owner: 'ca-scribner'
+          repository: 'github-actions-recipes'
+          pr_number: ${{ needs.test_pr_comment_context.outputs.pr_number }}
+      - name: Show branch name
+        run: echo "The value of branch name is ${{ stpes.get-branch-name-of-pr }}"
