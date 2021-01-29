@@ -47,6 +47,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Testing Getting Branch Name of PR
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: ./get-branch-name-of-pr/
         id: get-branch-name-of-pr
         with: 
