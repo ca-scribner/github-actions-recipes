@@ -1,5 +1,5 @@
 # reusable workflow for publishing all charms in this repo
-name: Sample workflow dispatch
+name: Trigger workflow_call
 
 on:
   push:
