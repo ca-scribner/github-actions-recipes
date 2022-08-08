@@ -1,0 +1,31 @@
+# reusable workflow for publishing all charms in this repo
+name: Publish on click
+
+on:
+  workflow_call:
+    # TODO: Add inputs here too
+    #       These would be non-required, with defaults left blank 
+    #       and computed below in some cases
+    secrets:
+      charmcraft-credentials:
+        required: true
+  workflow_dispatch:
+    inputs:
+      # TODO: Implement this
+      # source_github_branch:
+      #   description: Source branch to publish
+      #   required: false
+      #   default: 'main'
+      destination_channel:
+        description: CharmHub channel to publish to
+        required: false
+        default: 'latest/edge'
+
+jobs:
+  emit-stuff:
+    name: Emit stuff
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print inputs.destination_channel
+        run: echo "destination_channel = ${{ github.inputs.destination_channel }}"
