@@ -28,3 +28,17 @@ jobs:
         env:
               # Example showing this works in a local env too
               LOCAL_RUNID_2: ${{ secrets.SECRET_THAT_DOESNT_EXIST || github.run_id }}
+
+      - name: conditional step on a default that should exist
+        if: ${{ github.not_a_real_thing || 'real thing' }}
+        run: |
+          echo "I worked and I should have!"
+
+      - name: conditional step on a default that should not exist
+        if: ${{ github.not_a_real_thing || github.not_a_real_thing_2 }}
+        run: echo "I worked and I should not have!"
+
+      - name: if on a default value that exists but is empty
+        if: ${{ github.not_a_real_thing || '' }}
+        run: echo "I worked and I am not sure whether I should have or not..."
+        
