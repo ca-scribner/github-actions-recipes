@@ -37,3 +37,7 @@ jobs:
       - name: if destination_channel is ''
         if: ${{ github.inputs.destination_channel == '' }}
         run: echo "I ran"
+
+      - name: if destination_channel is not ''
+        if: ${{ github.inputs.destination_channel != '' }}
+        run: echo "I ran"
