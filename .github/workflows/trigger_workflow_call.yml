@@ -1,0 +1,13 @@
+# reusable workflow for publishing all charms in this repo
+name: Sample workflow dispatch
+
+on:
+  push:
+
+jobs:
+
+  trigger-something:
+    name: Trigger a thing
+    uses: ./.github/workflows/workflow_dispatch_event.yaml
+    secrets:
+      charmcraft-credentials: "${{ secrets.CHARMCRAFT_CREDENTIALS }}"

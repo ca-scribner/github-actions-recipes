@@ -29,3 +29,9 @@ jobs:
     steps:
       - name: Print inputs.destination_channel
         run: echo "destination_channel = ${{ github.inputs.destination_channel }}"
+
+      - name: if destination_channel
+        if: ${{ github.inputs.destination_channel}}
+
+      - name: if destination_channel is ''
+        if: ${{ github.inputs.destination_channel == '' }}
