@@ -17,7 +17,7 @@ jobs:
           # will be empty
           GLOBAL_EMPTY: ${{ secrets.SECRET_THAT_DOESNT_EXIST || secrets.ANOTHER_SECRET_THAT_DOESNT_EXIST }}
     steps:
-      - name: Dump GitHub context
+      - name: Print some environment variables
         run: |
           echo "GLOBAL_RUNID = $GLOBAL_RUNID"
           echo "GLOBAL_RUNID_2 = $GLOBAL_RUNID_2"

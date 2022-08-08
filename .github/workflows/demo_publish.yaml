@@ -1,0 +1,75 @@
+# reusable workflow for publishing all charms in this repo
+name: Publish
+
+on:
+  workflow_call:
+    # TODO: Add inputs here too
+    #       These would be non-required, with defaults left blank 
+    #       and computed below in some cases
+    secrets:
+      charmcraft-credentials:
+        required: true
+  workflow_dispatch:
+    inputs:
+      # TODO: Implement this
+      # source_github_branch:
+      #   description: Source branch to publish
+      #   required: false
+      #   default: 'main'
+      destination_channel:
+        description: CharmHub channel to publish to
+        required: false
+        default: 'latest/edge'
+
+jobs:
+
+  publish-charm:
+    name: Publish Charm
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        charm:
+          - kfp-api
+          # TODO: DEBUG: commented for debugging
+          # - kfp-persistence
+          # - kfp-profile-controller
+          # - kfp-schedwf
+          # - kfp-ui
+          # - kfp-viewer
+          # - kfp-viz
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Select charmhub channel
+        uses: canonical/charming-actions/channel@2.0.0-rc
+        id: select-channel
+        if: ${{ github.inputs.destination_channel == '' }}
+
+      # Combine all inputs into a single value for later steps to consume
+      - name: Consolidate inputs
+        id: consolidate-inputs
+        runs: |
+          echo "::set-output name=destination_channel::${{ github.inputs.destination_channel || steps.select-channel.outputs.name }}"
+          # Make charmcraft_credentials a masked value (eg: prevent it from printing in logs)
+          # This should be redundant since it should come as a secret, but just in case..id
+          credentials=${{ github.secrets.charmcraft_credentials || steps.secrets.CHARMCRAFT_CREDENTIALS }}
+          echo "::add-mask::$credentials"
+          echo "::set-output name=charmcraft_credentials::$credentials"
+
+      # DEBUG
+      - name: is this still a protected value?
+        runs: echo "${{ steps.consolidate-inputs.outputs.charmcraft_credentials }}"
+
+      - name: Upload charm to charmhub
+        uses: canonical/charming-actions/upload-charm@2.0.0-rc
+        with:
+          # Try to use the credentials passed to us, otherwise use those available from the repo
+          credentials: ${{ steps.consolidate-inputs.outputs.charmcraft_credentials }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          charm-path: charms/${{ matrix.charm }}  # TODO: Make this work for single- and multi-charm repos
+          channel: ${{ steps.consolidate-inputs.outputs.destination_channel }}
+          tag-prefix: ${{ matrix.charm }}  # TODO: Make this work for single- and multi-charm repos
