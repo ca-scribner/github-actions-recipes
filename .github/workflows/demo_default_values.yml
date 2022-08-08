@@ -6,22 +6,25 @@ jobs:
   show_default_values:
     runs-on: ubuntu-latest
     env:
-          GLOBAL_SECRET_EXISTS: ${{ secrets.SECRET_THAT_EXISTS || secrets.SECRET_THAT_EXISTS_2 }}
-          GLOBAL_SECRET_EXISTS_2: ${{ secrets.SECRET_THAT_DOESNT_EXIST || secrets.SECRET_THAT_EXISTS_2 }}
-          GLOBAL_SECRET_DOESNT_EXIST: ${{ secrets.SECRET_THAT_DOESNT_EXIST || secrets.ANOTHER_SECRET_THAT_DOESNT_EXIST }}
+          # Should show runid.  If it shows ***, then the secret won out
+          GLOBAL_RUNID: ${{ github.run_id || secrets.SECRET_THAT_EXISTS }}
+          GLOBAL_RUNID_2: ${{ secrets.SECRET_THAT_DOESNT_EXIST || github.run_id }}
+
+          # Should show default
+          GLOBAL_SHOW_DEFAULT: ${{ secrets.SECRET_THAT_DOESNT_EXIST || default value from expression text }}
+
+          # will be empty
+          GLOBAL_EMPTY: ${{ secrets.SECRET_THAT_DOESNT_EXIST || secrets.ANOTHER_SECRET_THAT_DOESNT_EXIST }}
     steps:
       - name: Dump GitHub context
         run: |
-          echo "LOCAL_SECRET_EXISTS = $GLOBAL_SECRET_EXISTS"
-          echo "GLOBAL_SECRET_EXISTS = $GLOBAL_SECRET_EXISTS"
-          echo
-          echo "LOCAL_SECRET_EXISTS_2 = $GLOBAL_SECRET_EXISTS_2"
-          echo "GLOBAL_SECRET_EXISTS_2 = $GLOBAL_SECRET_EXISTS_2"
-          echo
-          echo "LOCAL_SECRET_DOESNT_EXIST = $GLOBAL_SECRET_DOESNT_EXIST"
-          echo "GLOBAL_SECRET_DOESNT_EXIST = $GLOBAL_SECRET_DOESNT_EXIST"
-          echo
+          echo "GLOBAL_RUNID = $GLOBAL_RUNID"
+          echo "GLOBAL_RUNID_2 = $GLOBAL_RUNID_2"
+          echo "GLOBAL_SHOW_DEFAULT = $GLOBAL_SHOW_DEFAULT"
+          echo "GLOBAL_EMPTY = $GLOBAL_EMPTY"
+          echo "LOCAL_RUNID_2 = $LOCAL_RUNID_2"
+          echo "example showing it works directly in script (github runid) = ${{ github.run_id || this shouldnt show here }}"
+          echo "example showing it works directly in script (default value) = ${{ github.not_a_real_thing || this should show here }}"
         env:
-              LOCAL_SECRET_EXISTS: ${{ secrets.SECRET_THAT_EXISTS || secrets.SECRET_THAT_EXISTS_2 }}
-              LOCAL_SECRET_EXISTS_2: ${{ secrets.SECRET_THAT_DOESNT_EXIST || secrets.SECRET_THAT_EXISTS_2 }}
-              LOCAL_SECRET_DOESNT_EXIST: ${{ secrets.SECRET_THAT_DOESNT_EXIST || secrets.ANOTHER_SECRET_THAT_DOESNT_EXIST }}
+              # Example showing this works in a local env too
+              LOCAL_RUNID_2: ${{ secrets.SECRET_THAT_DOESNT_EXIST || github.run_id }}
