@@ -12,6 +12,7 @@ jobs:
 
           # Should show default
           GLOBAL_SHOW_DEFAULT: ${{ secrets.SECRET_THAT_DOESNT_EXIST || 'default value from expression text' }}
+          GLOBAL_SHOW_DEFAULT_FROM_EMPTY: ${{ '' || 'default value from expression text' }}
 
           # will be empty
           GLOBAL_EMPTY: ${{ secrets.SECRET_THAT_DOESNT_EXIST || secrets.ANOTHER_SECRET_THAT_DOESNT_EXIST }}
@@ -21,6 +22,7 @@ jobs:
           echo "GLOBAL_RUNID = $GLOBAL_RUNID"
           echo "GLOBAL_RUNID_2 = $GLOBAL_RUNID_2"
           echo "GLOBAL_SHOW_DEFAULT = $GLOBAL_SHOW_DEFAULT"
+          echo "GLOBAL_SHOW_DEFAULT_FROM_EMPTY = $GLOBAL_SHOW_DEFAULT"
           echo "GLOBAL_EMPTY = $GLOBAL_EMPTY"
           echo "LOCAL_RUNID_2 = $LOCAL_RUNID_2"
           echo "example showing it works directly in script (github runid) = ${{ github.run_id || 'this shouldnt show here' }}"
