@@ -8,6 +8,6 @@ jobs:
 
   trigger-something:
     name: Trigger a thing
-    uses: ./.github/workflows/workflow_dispatch_event.yaml
+    uses: ./.github/workflows/workflow_dispatch_event.yml
     secrets:
       charmcraft-credentials: "${{ secrets.CHARMCRAFT_CREDENTIALS }}"
