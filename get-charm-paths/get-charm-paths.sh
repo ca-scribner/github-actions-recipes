@@ -25,6 +25,6 @@ fi
 # { charm_paths: [...] }
 CHARM_PATHS_LIST=$(echo "$CHARM_PATHS" | jq -c --slurp --raw-input 'split("\n")[:-1]')
 
-echo "Found charm_paths_list: $CHARM_PATHS_LIST"
+echo "Found charm_paths: $CHARM_PATHS_LIST"
 
-echo "::set-output name=charm_paths_list::$CHARM_PATHS_LIST"
+echo "::set-output name=charm_paths::$CHARM_PATHS_LIST"
