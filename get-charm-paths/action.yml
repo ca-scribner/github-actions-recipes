@@ -3,7 +3,7 @@ description: 'Emits a list of relative paths to charms in the repository'
 outputs:
   charm-paths:
     description: 'JSON string of relative paths to charms in the repository'
-    value: ${{ steps.get-charm-paths.outputs.charm_paths_list }}
+    value: ${{ steps.get-charm-paths.outputs.charm_paths }}
 runs:
   using: 'composite'
   steps:
