@@ -11,4 +11,4 @@ runs:
     - name: 'Get paths for all charms in repo'
       id: get-charm-paths
       shell: bash
-      run: bash ./get-charm-paths.sh
+      run: bash ${{ github.action_path }}/get-charm-paths.sh
