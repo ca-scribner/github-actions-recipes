@@ -1,0 +1,24 @@
+name: 'Get Charm Paths'
+description: 'Emits a list of relative paths to charms in the repository'
+inputs:
+#  owner:
+#    description: 'Repository owner'
+#    required: true
+#  repository:
+#    description: 'Repository name'
+#    required: true
+#  pr_number:
+#    description: 'PR number to query for branch name'
+#    required: true
+outputs:
+  charm-paths:
+    description: 'JSON string of relative paths to charms in the repository'
+    value: ${{ steps.get-charm-paths.outputs.charm_paths_list }}
+runs:
+  using: 'composite'
+  steps:
+    - uses: 'actions/checkout@v2'
+    - name: 'Get paths for all charms in repo'
+      id: get-charm-paths
+      shell: bash
+      run: bash .github/workflows/get-charm-paths.sh
