@@ -4,37 +4,45 @@ This action emits a JSON list of the relative paths to any Juju Charms in this d
 
 # Example usage
 
-An example workflow using this action is shown below.
+Example workflow:
 
-```
+```yaml
 name: Demo get-charm-paths
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 jobs:
-  get-charm-paths:
-    name: Generate the Charm Matrix content
+  get-charm-paths-python:
+    name: Generate the Charm Matrix content (python)
     runs-on: ubuntu-latest
     outputs:
-      charm_paths: ${{ steps.get-charm-paths.outputs.charm_paths }}
+      charm_paths: ${{ steps.get-charm-paths.outputs.charm-paths }}
     steps:
       - uses: actions/checkout@v2
-        with: 
+        with:
           fetch-depth: 0
-          ref: ${{ inputs.source_branch }}
       - name: Get paths for all charms in this repo
         id: get-charm-paths
         uses: ca-scribner/github-actions-recipes/get-charm-paths-python@master
 
-  use-charm-paths:
-    name: Use charm paths in a matrix
+  echo-charm-paths-python:
+    name: Echo charm paths emitted (python)
     runs-on: ubuntu-latest
-    needs: get-charm-paths
+    needs: get-charm-paths-python
+    steps:
+      - run: |
+          echo "Got charm_paths: ${{ needs.get-charm-paths-python.outputs.charm_paths }}"
+
+  use-charm-paths-python:
+    name: Use charm paths in a matrix (python)
+    runs-on: ubuntu-latest
+    needs: get-charm-paths-python
     strategy:
       fail-fast: false
       matrix:
-        charm-path: ${{ fromJson(needs.get-charm-paths.outputs.charm_paths) }}
+        charm-path: ${{ fromJson(needs.get-charm-paths-python.outputs.charm_paths) }}
     steps:
-      - run: echo "Got charm path: ${{ matrix.charm-path }}"
+      - run: |
+          echo "Got charm path: ${{ matrix.charm-path }}"
 ```
