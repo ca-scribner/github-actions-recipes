@@ -4,6 +4,8 @@ on:
   schedule:
     # FOR DEBUGGING, every 5 minutes of every day
     - cron: '*/5 * * * *' 
+    # FOR DEBUGGING, every 47th minute of every hour of every day
+    - cron: '47 * * * *' 
 
 jobs:
   test_schedule:
