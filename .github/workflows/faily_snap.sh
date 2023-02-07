@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [[ "$((RANDOM % 2))" -eq 0 ]]; then
-	snap "$@"
-else
+if [[ "$((RANDOM % 5))" -eq 0 ]]; then
 	echo snap command failed randomly
+else
+	snap "$@"
 fi

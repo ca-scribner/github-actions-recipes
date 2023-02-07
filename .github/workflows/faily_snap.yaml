@@ -33,3 +33,28 @@ jobs:
         run: sudo snap info yq
       - name: Do something in snap that is occasionally successful
         run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+
