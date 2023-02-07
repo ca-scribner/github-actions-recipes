@@ -12,11 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install something successfully
-        run: snap install yq
+        run: sudo snap install yq
   work_never:
     runs-on: ubuntu-latest
     steps:
       - name: which snap
         run: which snap
       - name: Replace snap with a broken version
-        run: echo "$GITHUB_CONTEXT" > `which snap`
+        run: sudo echo "echo 123; exit 1" > `which snap`
+      - name: Install something unsuccessfully
+        run: sudo snap install yq
