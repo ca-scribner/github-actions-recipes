@@ -19,6 +19,6 @@ jobs:
       - name: which snap
         run: which snap
       - name: Replace snap with a broken version
-        run: sudo echo "echo 123; exit 1" > `which snap`
+        run: echo "echo 123; exit 1" | sudo tee `which snap`
       - name: Install something unsuccessfully
         run: sudo snap install yq
