@@ -16,9 +16,20 @@ jobs:
   work_never:
     runs-on: ubuntu-latest
     steps:
-      - name: which snap
-        run: which snap
-      - name: Replace snap with a broken version
-        run: echo "echo 123; exit 1" | sudo tee `which snap`
-      - name: Install something unsuccessfully
-        run: sudo snap install yq
+      - uses: actions/checkout@master
+      - name: archive snap
+        run: sudo mv /usr/bin/snap /usr/bin/snap_real
+      - name: Replace snap with a flaky version
+        run: sudo mv .github/workflows/faily_snap.sh /usr/bin/snap
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
+      - name: Do something in snap that is occasionally successful
+        run: sudo snap info yq
