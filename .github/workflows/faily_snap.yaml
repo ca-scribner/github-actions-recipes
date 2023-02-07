@@ -1,0 +1,21 @@
+# Replaces snap with something that'll fail sometimes, then shows it happened
+name: Faily snap
+on: 
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  work_always:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install something successfully
+        run: snap install yq
+  work_never:
+    runs-on: ubuntu-latest
+    steps:
+      - name: which snap
+        run: which snap
+      - name: Replace snap with a broken version
+        run: echo "$GITHUB_CONTEXT" > `which snap`
