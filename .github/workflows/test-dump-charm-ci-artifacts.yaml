@@ -36,5 +36,5 @@ jobs:
         juju add-model kubeflow
         juju switch kubeflow
 
-    - uses: ./dump-charm-ci-artifacts/action.yml
+    - uses: ./dump-charm-ci-artifacts/
 
