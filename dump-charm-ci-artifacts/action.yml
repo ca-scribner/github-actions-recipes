@@ -56,7 +56,7 @@ runs:
       run: |
         wget https://github.com/corneliusweig/ketall/releases/download/v1.3.8/get-all-amd64-linux.tar.gz
         tar -xf get-all-amd64-linux.tar.gz
-        mv get-all-amd64-linux.tar.gz ketall
+        mv get-all-amd64-linux ketall
 
     - name: Collect deeper Kubernetes resource details
       # Includes CRDs, full yaml definitions
