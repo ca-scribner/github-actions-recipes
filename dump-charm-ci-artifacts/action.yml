@@ -3,6 +3,9 @@ description: 'Dumps to Artifacts useful Juju, Kubernetes, and Charmcraft log inf
 runs:
   using: 'composite'
   steps:
+    - name: Check out repo
+      uses: actions/checkout@v3
+
     - name: Create artifact collection directory
       id: mkdir
       shell: bash
@@ -18,7 +21,7 @@ runs:
       shell: bash
       if: always()
       # Use grep as cat will fail if no logs exist
-      run: 
+      run: |
         grep -hs ^ /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log | tee ${{ steps.mkdir.outputs.log-dir }}/charmcraft_logs
         cp /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log ${{ steps.mkdir.outputs.log-dir }}/
 
@@ -38,7 +41,7 @@ runs:
     - name: Collect Juju status log
       shell: bash
       if: always()
-      run: bash ./show-all-status-log.bash 2>&1 | tee ${{ steps.mkdir.outputs.log-dir }}/juju-status-logs.txt
+      run: bash ${{ github.action_path }}/show-all-status-log.bash 2>&1 | tee ${{ steps.mkdir.outputs.log-dir }}/juju-status-logs.txt
 
     # Kubernetes
 
