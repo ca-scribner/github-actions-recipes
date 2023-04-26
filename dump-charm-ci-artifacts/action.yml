@@ -18,7 +18,9 @@ runs:
       shell: bash
       if: always()
       # Use grep as cat will fail if no logs exist
-      run: grep -hs ^ /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log | tee ${{ steps.mkdir.outputs.log-dir }}/charmcraft.log
+      run: 
+        grep -hs ^ /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log | tee ${{ steps.mkdir.outputs.log-dir }}/charmcraft_logs
+        cp /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log ${{ steps.mkdir.outputs.log-dir }}/
 
     # Juju
 
@@ -33,13 +35,10 @@ runs:
       if: always()
       run: juju-crashdump -o ${{ steps.mkdir.outputs.log-dir }}
 
-    # TODO: Loop through all applications/units and get these logs.  Or at least have a way of asking for them.
-    # - name: Collect Juju status log
-    #   shell: bash
-    #   if: always()
-    #   run: |
-    #     juju show-status-log istio-pilot/0 | tee t${{ steps.mkdir.outputs.log-dir }}/juju-status-log-istio-pilot.txt
-    #     juju show-status-log istio-ingressgateway/0 | tee ${{ steps.mkdir.outputs.log-dir }}/juju-status-log-istio-ingressgateway.txt
+    - name: Collect Juju status log
+      shell: bash
+      if: always()
+      run: bash ./show-all-status-log.bash 2>&1 | tee ${{ steps.mkdir.outputs.log-dir }}/juju-status-logs.txt
 
     # Kubernetes
 

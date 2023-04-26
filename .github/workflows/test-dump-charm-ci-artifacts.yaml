@@ -36,6 +36,11 @@ jobs:
         juju add-model kubeflow
         juju switch kubeflow
 
+    - name: Make some fake charmcraft logs
+      run: |
+        echo fakelog1 > /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-fake1.log
+        echo fakelog2 > /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-fake2.log
+
     - name: Pretend to fail
       run: exit 1
 
