@@ -22,8 +22,10 @@ runs:
       if: always()
       # Use grep as cat will fail if no logs exist
       run: |
-        grep -hs ^ /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log | tee ${{ steps.mkdir.outputs.log-dir }}/charmcraft_logs
-        cp /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log ${{ steps.mkdir.outputs.log-dir }}/
+        grep -hs ^ /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log
+        for f in `ls cp /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log`; do
+          cp $f ${{ steps.mkdir.outputs.log-dir }}/
+        done
 
     # Juju
 
