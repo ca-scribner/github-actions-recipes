@@ -1,0 +1,68 @@
+name: 'Dump Charm CI Log Artifacts'
+description: 'Dumps to Artifacts useful Juju, Kubernetes, and Charmcraft log information.  Requires kubectl to be set up with a context, and charmcraft to be installed.'
+runs:
+  using: 'composite'
+  steps:
+    - name: Create artifact collection directory
+      id: mkdir
+      shell: bash
+      run: |
+        LOG_DIR="tmp_logs"
+        echo "log-dir=$(echo $LOG_DIR)" >> $GITHUB_OUTPUT
+        mkdir $LOG_DIR
+
+    # Charmcraft
+
+    - name: Collect charmcraft logs
+      shell: bash
+      run: |
+        cat /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log | tee ${{ steps.mkdir.outputs.log-dir }}/charmcraft.log
+
+    # Juju
+
+    - name: 'Install juju-crashdump'
+      shell: bash
+      run: sudo snap install juju-crashdump
+
+    - name: Collect juju-crashdump
+      # Includes juju status, all debug-logs, model settings
+      shell: bash
+      run: juju-crashdump -o ${{ steps.mkdir.outputs.log-dir }}
+
+    # TODO: Loop through all applications/units and get these logs.  Or at least have a way of asking for them.
+    # - name: Collect Juju status log
+    #   shell: bash
+    #   run: |
+    #     juju show-status-log istio-pilot/0 | tee t${{ steps.mkdir.outputs.log-dir }}/juju-status-log-istio-pilot.txt
+    #     juju show-status-log istio-ingressgateway/0 | tee ${{ steps.mkdir.outputs.log-dir }}/juju-status-log-istio-ingressgateway.txt
+
+    # Kubernetes
+
+    - name: Collect kubectl cluster-info dump
+      # Includes container logs, other details about basic k8s resources
+      shell: bash
+      run: |
+        kubectl cluster-info dump | tee ${{ steps.mkdir.outputs.log-dir }}/kubectl-cluster-info-dump.txt
+
+    - name: 'Install ketall'
+      # https://github.com/corneliusweig/ketall#linux
+      shell: bash
+      run: |
+        curl -Lo ketall.gz https://github.com/corneliusweig/ketall/releases/download/v1.3.8/ketall-amd64-linux.tar.gz 
+        gunzip ketall.gz
+        chmod +x ketall
+
+    - name: Collect deeper Kubernetes resource details
+      # Includes CRDs, full yaml definitions
+      shell: bash
+      run: |
+        ./ketall > ${{ steps.mkdir.outputs.log-dir }}/kubernetes-ketall.txt
+        ./ketall -o yaml > ${{ steps.mkdir.outputs.log-dir }}/kubernetes-ketall-detailed.yaml
+
+    - name: Upload debug artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: juju-kubernetes-charmcraft-logs
+        path: ${{ steps.mkdir.outputs.log-dir }}
+        if-no-files-found: error
+
