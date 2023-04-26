@@ -2,6 +2,7 @@ name: Test Dump Charm CI Artifacts
 
 on:
   pull_request:
+  push:
 
 jobs:
 
