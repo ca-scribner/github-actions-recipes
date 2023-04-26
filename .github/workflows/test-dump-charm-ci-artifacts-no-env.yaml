@@ -1,0 +1,31 @@
+name: Test Dump Charm CI Artifacts (no env)
+
+on:
+  pull_request:
+  push:
+
+jobs:
+
+  test-dump:
+    name: Test dump (no env)
+    runs-on: ubuntu-22.04
+
+    steps:
+    # Set things up like a charm would.  Get juju and microk8s
+    - name: Check out repo
+      uses: actions/checkout@v3
+
+    - name: Make some fake charmcraft logs
+      run: |
+        echo fakelog1 > /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-fake1.log
+        echo fakelog2 > /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-fake2.log
+
+    - name: Pretend to fail
+      run: exit 1
+
+    - name: A step to be skipped, just so we know that worked
+      run: echo "Did I execute?"
+
+    - uses: ./dump-charm-ci-artifacts/
+      if: always()
+

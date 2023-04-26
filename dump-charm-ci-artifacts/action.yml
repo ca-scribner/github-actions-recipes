@@ -53,10 +53,19 @@ runs:
       # https://github.com/corneliusweig/ketall#linux
       shell: bash
       if: always()
+      # DEBUG: Fix the run commands below
       run: |
+        ls -l
+        echo 1
         curl -Lo ketall.gz https://github.com/corneliusweig/ketall/releases/download/v1.3.8/ketall-amd64-linux.tar.gz 
+        ls -l
+        echo 2
         gunzip ketall.gz
+        ls -l
+        echo 3
         chmod +x ketall
+        ls -l
+        echo 4
 
     - name: Collect deeper Kubernetes resource details
       # Includes CRDs, full yaml definitions
