@@ -36,5 +36,12 @@ jobs:
         juju add-model kubeflow
         juju switch kubeflow
 
+    - name: Pretend to fail
+      run: exit 1
+
+    - name: A step to be skipped, just so we know that worked
+      run: echo "Did I execute?"
+
     - uses: ./dump-charm-ci-artifacts/
+      if: always()
 
