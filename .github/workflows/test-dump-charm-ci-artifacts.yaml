@@ -1,0 +1,39 @@
+name: Test Dump Charm CI Artifacts
+
+on:
+  pull_request:
+
+jobs:
+
+  test-dump:
+    name: Test dump
+    runs-on: ubuntu-22.04
+
+    steps:
+    # Set things up like a charm would.  Get juju and microk8s
+    - name: Check out repo
+      uses: actions/checkout@v3
+
+    - name: Setup operator environment
+      uses: charmed-kubernetes/actions-operator@main
+      with:
+        provider: microk8s
+        channel: 1.24/stable
+        charmcraft-channel: latest/candidate
+        # TODO: Unpin this when this bug is resolved: https://bugs.launchpad.net/juju/+bug/1992833.
+        #       In particular, these tests failed deploying the prometheus-k8s charm where it gets an error in
+        #       the "metrics-endpoint-relation-changed" hook.
+        bootstrap-options: --agent-version="2.9.34"
+        microk8s-addons: "dns storage rbac metallb:10.64.140.43-10.64.140.49"
+    # TODO: Remove once the actions-operator does this automatically
+    - name: Configure kubectl
+      run: |
+        sg microk8s -c "microk8s config > ~/.kube/config"
+
+    - name: Add model
+      run: |
+        juju add-model kubeflow
+        juju switch kubeflow
+
+    - uses: ./dump-charm-ci-artifacts/action.yml
+
