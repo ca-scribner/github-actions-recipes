@@ -23,7 +23,7 @@ runs:
       # Use grep as cat will fail if no logs exist
       run: |
         grep -hs ^ /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log
-        for f in `ls cp /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log`; do
+        for f in `ls /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log`; do
           cp $f ${{ steps.mkdir.outputs.log-dir }}/
         done
 
