@@ -38,6 +38,7 @@ jobs:
 
     - name: Make some fake charmcraft logs
       run: |
+        mkdir -p /home/runner/snap/charmcraft/common/cache/charmcraft/log/
         echo fakelog1 > /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-fake1.log
         echo fakelog2 > /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-fake2.log
 
