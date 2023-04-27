@@ -6,6 +6,8 @@ runs:
     - name: Check out repo
       uses: actions/checkout@v3
 
+    # Setup
+
     - name: Create artifact collection directory
       id: mkdir
       shell: bash
@@ -15,44 +17,10 @@ runs:
         echo "log-dir=$(echo $LOG_DIR)" >> $GITHUB_OUTPUT
         mkdir $LOG_DIR
 
-    # Charmcraft
-
-    - name: Collect charmcraft logs
-      shell: bash
-      if: always()
-      # Use grep as cat will fail if no logs exist
-      run: |
-        grep -hs ^ /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log
-        for f in `ls /home/runner/snap/charmcraft/common/cache/charmcraft/log/charmcraft-*.log`; do
-          cp $f ${{ steps.mkdir.outputs.log-dir }}/
-        done
-
-    # Juju
-
     - name: 'Install juju-crashdump'
       shell: bash
       if: always()
       run: sudo snap install juju-crashdump
-
-    - name: Collect juju-crashdump
-      # Includes juju status, all debug-logs, model settings
-      shell: bash
-      if: always()
-      run: juju-crashdump -o ${{ steps.mkdir.outputs.log-dir }}
-
-    - name: Collect Juju status log
-      shell: bash
-      if: always()
-      run: bash ${{ github.action_path }}/show-all-status-log.bash 2>&1 | tee ${{ steps.mkdir.outputs.log-dir }}/juju-status-logs.txt
-
-    # Kubernetes
-
-    - name: Collect kubectl cluster-info dump
-      # Includes container logs, other details about basic k8s resources
-      shell: bash
-      if: always()
-      run: |
-        kubectl cluster-info dump | tee ${{ steps.mkdir.outputs.log-dir }}/kubectl-cluster-info-dump.txt
 
     - name: 'Install ketall'
       # https://github.com/corneliusweig/ketall
@@ -63,13 +31,16 @@ runs:
         tar -xf get-all-amd64-linux.tar.gz
         mv get-all-amd64-linux ketall
 
-    - name: Collect deeper Kubernetes resource details
-      # Includes CRDs, full yaml definitions
+    # Dump logs
+
+    - name: Collect all logs
       shell: bash
       if: always()
       run: |
-        ./ketall > ${{ steps.mkdir.outputs.log-dir }}/kubernetes-ketall.txt
-        ./ketall -o yaml > ${{ steps.mkdir.outputs.log-dir }}/kubernetes-ketall-detailed.yaml
+        export OUTPUT_DIR=tmp
+        bash ${{ github.action_path }}/logdump.bash
+
+    # Save logs
 
     - name: Upload debug artifacts
       uses: actions/upload-artifact@v3
