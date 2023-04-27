@@ -53,4 +53,3 @@ runs:
     - name: Debugging with tmate
       uses: mxschmitt/action-tmate@v3.14
       if: always()
-      timeout-minutes: 20
