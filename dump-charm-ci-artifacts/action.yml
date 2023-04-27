@@ -29,7 +29,8 @@ runs:
       run: |
         wget https://github.com/corneliusweig/ketall/releases/download/v1.3.8/get-all-amd64-linux.tar.gz
         tar -xf get-all-amd64-linux.tar.gz
-        mv get-all-amd64-linux ketall
+        mkdir -p /home/runner/.local/bin/
+        mv get-all-amd64-linux /home/runner/.local/bin/ketall
 
     # Dump logs
 
