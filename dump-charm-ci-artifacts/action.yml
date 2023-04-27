@@ -50,7 +50,3 @@ runs:
         name: juju-kubernetes-charmcraft-logs
         path: ${{ steps.mkdir.outputs.log-dir }}
         if-no-files-found: error
-
-    - name: Debugging with tmate
-      uses: mxschmitt/action-tmate@v3.14
-      if: always()
