@@ -38,7 +38,7 @@ runs:
       shell: bash
       if: always()
       run: |
-        export OUTPUT_DIR=tmp
+        export OUTPUT_DIR=${{ steps.mkdir.output.log-dir }}
         bash ${{ github.action_path }}/logdump.bash
 
     # Save logs
