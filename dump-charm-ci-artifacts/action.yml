@@ -20,7 +20,7 @@ runs:
     - name: 'Install juju-crashdump'
       shell: bash
       if: always()
-      run: sudo snap install juju-crashdump
+      run: sudo snap install juju-crashdump --classic
 
     - name: 'Install ketall'
       # https://github.com/corneliusweig/ketall
@@ -38,7 +38,7 @@ runs:
       shell: bash
       if: always()
       run: |
-        export OUTPUT_DIR=${{ steps.mkdir.output.log-dir }}
+        export OUTPUT_DIR=${{ steps.mkdir.outputs.log-dir }}
         bash ${{ github.action_path }}/logdump.bash
 
     # Save logs
