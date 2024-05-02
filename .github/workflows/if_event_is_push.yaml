@@ -1,0 +1,19 @@
+name: If event is push
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      run: echo ${{ github.event_name }}
+
+  run-if-push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      run: "hello world"
