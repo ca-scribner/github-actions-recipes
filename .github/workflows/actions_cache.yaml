@@ -33,7 +33,7 @@ jobs:
       run: |
         echo touching something random in $CRAFT_SHARED_CACHE
         mkdir -p $CRAFT_SHARED_CACHE
-        touch $CRAFT_SHARED_CACHE/$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 8)
+        touch $CRAFT_SHARED_CACHE/${{ github.run_id }}-${{ github.run_attempt }}
 
     - name: Show what is in the cache
       run: ls -l ${{ env.CRAFT_SHARED_CACHE }} || true
