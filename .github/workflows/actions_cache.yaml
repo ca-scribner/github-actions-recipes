@@ -24,7 +24,8 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ env.CRAFT_SHARED_CACHE }}
-        key: craft-shared-cache-${{ github.run_id }}
+        # Caches have to be unique - there is no overwrite mechanic.  Add IDs to avoid this (is there a better set of IDs?)
+        key: craft-shared-cache-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job_id }}
 
     - name: Show what is in the cache
       run: ls -l ${{ env.CRAFT_SHARED_CACHE }} || true
@@ -33,7 +34,7 @@ jobs:
       run: |
         echo touching something random in $CRAFT_SHARED_CACHE
         mkdir -p $CRAFT_SHARED_CACHE
-        touch $CRAFT_SHARED_CACHE/${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job_id }}
+        touch $CRAFT_SHARED_CACHE/${{ github.run_id }}-${{ github.run_attempt }}
 
     - name: Show what is in the cache
       run: ls -l ${{ env.CRAFT_SHARED_CACHE }} || true
