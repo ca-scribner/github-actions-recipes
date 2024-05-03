@@ -1,0 +1,37 @@
+name: Test how actions/cache works
+
+on:
+  push:
+
+jobs:
+
+  tests:
+    name: Build the charm
+    runs-on: ubuntu-20.04
+    env:
+      PIP_CACHE_DIR: /home/runner/.cache/pip
+      CRAFT_SHARED_CACHE: /home/runner/.cache/craft_shared_cache_for_ci
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    - name: Show what is in the cache
+      run: ls -l ${{ env.CRAFT_SHARED_CACHE }}
+
+    - name: Cache something random
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.CRAFT_SHARED_CACHE }}
+        key: craft-shared-cache
+
+    - name: Show what is in the cache
+      run: ls -l ${{ env.CRAFT_SHARED_CACHE }}
+
+    - name: Add something random to the cache
+      run: touch $(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 8)
+
+    - name: Show what is in the cache
+      run: ls -l ${{ env.CRAFT_SHARED_CACHE }}
+
