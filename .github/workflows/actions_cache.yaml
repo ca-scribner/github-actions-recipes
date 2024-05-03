@@ -1,0 +1,49 @@
+name: Test how actions/cache works
+
+on:
+  push:
+
+jobs:
+
+  tests:
+    name: Test the cache!
+    runs-on: ubuntu-20.04
+    env:
+      PIP_CACHE_DIR: /home/runner/.cache/pip
+      CRAFT_SHARED_CACHE: /home/runner/.cache/craft_shared_cache_for_ci
+
+    strategy:
+      matrix:
+        x:
+          - 1
+          - 2
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    - name: Show what is in the cache
+      run: ls -l ${{ env.CRAFT_SHARED_CACHE }} || true
+
+    - name: Cache something random
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.CRAFT_SHARED_CACHE }}
+        # Caches have to be unique - there is no overwrite mechanic.  Add IDs to avoid this (is there a better set of IDs?)
+        # ref: https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
+        key: craft-shared-cache-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ strategy.job-index }}
+        restore-keys: craft-shared-cache
+
+    - name: Show what is in the cache
+      run: ls -l ${{ env.CRAFT_SHARED_CACHE }} || true
+
+    - name: Add something random to the cache
+      run: |
+        echo touching something random in $CRAFT_SHARED_CACHE
+        mkdir -p $CRAFT_SHARED_CACHE
+        touch $CRAFT_SHARED_CACHE/${{ github.run_id }}-${{ github.run_attempt }}
+
+    - name: Show what is in the cache
+      run: ls -l ${{ env.CRAFT_SHARED_CACHE }} || true
+
