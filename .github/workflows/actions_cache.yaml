@@ -25,6 +25,7 @@ jobs:
       with:
         path: ${{ env.CRAFT_SHARED_CACHE }}
         # Caches have to be unique - there is no overwrite mechanic.  Add IDs to avoid this (is there a better set of IDs?)
+        # ref: https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
         key: craft-shared-cache-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
         restore-keys: craft-shared-cache
 
