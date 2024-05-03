@@ -12,6 +12,12 @@ jobs:
       PIP_CACHE_DIR: /home/runner/.cache/pip
       CRAFT_SHARED_CACHE: /home/runner/.cache/craft_shared_cache_for_ci
 
+    strategy:
+      matrix:
+        x:
+          - 1
+          - 2
+
     steps:
     - name: Check out code
       uses: actions/checkout@v4
