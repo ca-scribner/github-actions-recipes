@@ -11,6 +11,9 @@ jobs:
   process-repository-dispatch-via-python:
     runs-on: ubuntu-latest
     steps:
+    - name: Test if editing on branch works for PRs
+      run: echo "I'm on a branch!"
+
     - name: Dump GitHub context
       run: echo "${{ toJson(github) }}"
 
